@@ -1,4 +1,4 @@
-#include <translator.h>
+#include <parser/parser.h>
 
 #include <cctype>
 #include <iostream>

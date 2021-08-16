@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <translator.h>
+#include <parser/parser.h>
 
 namespace book = dragon_book;
 
