@@ -10,14 +10,16 @@ int main()
     {
         book::Parser parser;
         parser.Expr();
+
+        std::cout << std::endl;
     }
     catch(std::exception& e)
     {
         std::cout << "\n"
                      "Error: " << e.what() << std::endl;
-    }
 
-    std::cout << std::endl;
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
