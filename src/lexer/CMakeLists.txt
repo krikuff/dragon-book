@@ -3,17 +3,17 @@ cmake_minimum_required(VERSION 3.19.0)
 project(lexer)
 
 set(HEADERS
-    number.h
-    word.h
-    token.h
     lexer.h
+    number.h
+    token.h
+    word.h
 )
 
 set(SOURCES
-    number.cpp
-    word.cpp
-    token.cpp
     lexer.cpp
+    number.cpp
+    token.cpp
+    word.cpp
 )
 
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES})
