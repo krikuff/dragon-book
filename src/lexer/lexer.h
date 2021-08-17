@@ -22,6 +22,7 @@ public:
 
 private:
     void Reserve(Word const& word);
+    char PeekNext();
 
 private:
     int line_;

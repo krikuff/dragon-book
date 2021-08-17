@@ -20,7 +20,7 @@ Lexer::Lexer()
 
 std::unique_ptr<Token> Lexer::Scan()
 {
-    for( ; ; std::cin.get(peek_))
+    for( ; ; PeekNext())
     {
         if(peek_ == ' ' || peek_ == '\t')
         {
@@ -43,7 +43,7 @@ std::unique_ptr<Token> Lexer::Scan()
             {
                 int digit = peek_ - '0';
                 number = 10 * number + digit;
-                std::cin.get(peek_);
+                PeekNext();
             } while (std::isdigit(peek_));
 
             return std::make_unique<Token>( Number{number} );
@@ -56,8 +56,8 @@ std::unique_ptr<Token> Lexer::Scan()
             do
             {
                 buff.push_back(peek_);
-                std::cin.get(peek_);
-            } while(std::isalnum(peek_));
+                PeekNext();
+            } while (std::isalnum(peek_));
 
             auto known_word = words_.find(buff);
             if(known_word != words_.end())
@@ -68,6 +68,26 @@ std::unique_ptr<Token> Lexer::Scan()
             Word new_word{ Tag::Id, buff };
             words_.emplace(buff, new_word);
             return std::make_unique<Token>( new_word );
+        }
+
+        // scan comments
+        if(peek_ == '/')
+        {
+            PeekNext();
+
+            // //-type
+            if(peek_ == '/')
+            {
+                while(PeekNext() != '\n')
+                    ;
+                line_ += 1;
+            }
+            else if (peek_ == '*') // /**/-type
+            {
+                while( !(PeekNext() == '*' && PeekNext() == '/') )
+                    ;
+                continue;
+            } // otherwise it is division sign
         }
 
         auto token = std::make_unique<Token>(peek_);
@@ -81,6 +101,12 @@ std::unique_ptr<Token> Lexer::Scan()
 void Lexer::Reserve(Word const& word)
 {
     words_.emplace(word.GetLexeme(), word);
+}
+
+char Lexer::PeekNext()
+{
+    std::cin.get(peek_);
+    return peek_;
 }
 
 } // namespace dragon_book
