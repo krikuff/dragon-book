@@ -90,6 +90,16 @@ std::shared_ptr<Token> Lexer::Scan()
             } // otherwise it is division sign
         }
 
+        // scan composite operators
+        if(peek_ == '<' || peek_ == '>' || peek_ == '=' || peek_ == '!')
+        {
+            char first_part = peek_;
+            if(PeekNext() == '=')
+            {
+                return std::make_shared<Token>( Word{Tag::CompositeOp, std::string(1, first_part) + "="} );
+            }
+        }
+
         auto token = std::make_shared<Token>(peek_);
         peek_ = ' ';
         return token;
