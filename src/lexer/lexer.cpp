@@ -15,8 +15,8 @@ Lexer::Lexer()
     Reserve(Word{ Tag::False, "false" });
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreturn-type"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wreturn-type"
 
 std::shared_ptr<Token> Lexer::Scan()
 {
@@ -96,7 +96,7 @@ std::shared_ptr<Token> Lexer::Scan()
     }
 }
 
-#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
 
 void Lexer::Reserve(Word const& word)
 {
