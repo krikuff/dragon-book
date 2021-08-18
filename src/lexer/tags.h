@@ -10,7 +10,8 @@ enum Tag : int
     True  = 258,
     False = 259,
 
-    CompositeOp    = 260,
+    FloatNum = 260,
+    CompositeOp    = 261,
 };
 
 } // namespace dragon_book
