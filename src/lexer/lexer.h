@@ -18,7 +18,7 @@ public:
 
     ~Lexer() = default;
 
-    std::unique_ptr<Token> Scan();
+    std::shared_ptr<Token> Scan();
 
 private:
     void Reserve(Word const& word);
@@ -27,7 +27,10 @@ private:
 private:
     int line_;
     char peek_;
-    std::unordered_map<std::string, Word> words_;
+    std::unordered_map<
+        std::string,
+        std::shared_ptr<Token>
+    > words_;
 };
 
 } // namespace dragon_book

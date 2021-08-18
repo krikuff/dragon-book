@@ -18,7 +18,7 @@ Lexer::Lexer()
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wreturn-type"
 
-std::unique_ptr<Token> Lexer::Scan()
+std::shared_ptr<Token> Lexer::Scan()
 {
     for( ; ; PeekNext())
     {
@@ -46,7 +46,7 @@ std::unique_ptr<Token> Lexer::Scan()
                 PeekNext();
             } while (std::isdigit(peek_));
 
-            return std::make_unique<Token>( Number{number} );
+            return std::make_shared<Token>( Number{number} );
         }
 
         // scan identifiers
@@ -62,12 +62,12 @@ std::unique_ptr<Token> Lexer::Scan()
             auto known_word = words_.find(buff);
             if(known_word != words_.end())
             {
-                return std::make_unique<Token>( known_word->second );
+                return known_word->second;
             }
 
-            Word new_word{ Tag::Id, buff };
+            auto new_word = std::make_shared<Token>( Word{Tag::Id, buff} );
             words_.emplace(buff, new_word);
-            return std::make_unique<Token>( new_word );
+            return new_word;
         }
 
         // scan comments
@@ -90,7 +90,7 @@ std::unique_ptr<Token> Lexer::Scan()
             } // otherwise it is division sign
         }
 
-        auto token = std::make_unique<Token>(peek_);
+        auto token = std::make_shared<Token>(peek_);
         peek_ = ' ';
         return token;
     }
@@ -100,7 +100,7 @@ std::unique_ptr<Token> Lexer::Scan()
 
 void Lexer::Reserve(Word const& word)
 {
-    words_.emplace(word.GetLexeme(), word);
+    words_.emplace(word.GetLexeme(), std::make_shared<Token>( word ));
 }
 
 char Lexer::PeekNext()
