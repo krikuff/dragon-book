@@ -46,7 +46,7 @@ std::shared_ptr<Token> Lexer::Scan()
                 PeekNext();
             } while (std::isdigit(peek_));
 
-            return std::make_shared<Token>( Number{number} );
+            return std::make_shared<Number>( number );
         }
 
         // scan identifiers
@@ -65,7 +65,7 @@ std::shared_ptr<Token> Lexer::Scan()
                 return known_word->second;
             }
 
-            auto new_word = std::make_shared<Token>( Word{Tag::Id, buff} );
+            auto new_word = std::make_shared<Word>( Tag::Id, buff );
             words_.emplace(buff, new_word);
             return new_word;
         }
@@ -96,7 +96,7 @@ std::shared_ptr<Token> Lexer::Scan()
             char first_part = peek_;
             if(PeekNext() == '=')
             {
-                return std::make_shared<Token>( Word{Tag::CompositeOp, std::string(1, first_part) + "="} );
+                return std::make_shared<Word>( Tag::CompositeOp, std::string(1, first_part) + "=" );
             }
         }
 
@@ -110,7 +110,7 @@ std::shared_ptr<Token> Lexer::Scan()
 
 void Lexer::Reserve(Word const& word)
 {
-    words_.emplace(word.GetLexeme(), std::make_shared<Token>( word ));
+    words_.emplace(word.GetLexeme(), std::make_shared<Word>( word ));
 }
 
 char Lexer::PeekNext()
